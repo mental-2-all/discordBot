@@ -1,22 +1,39 @@
 # This example requires the 'message_content' intent.
 
-import discord
+import disnake
+from disnake.ext import commands
+import os
+import dotenv 
+import textwrap 
 
-intents = discord.Intents.default()
-intents.message_content = True
+dotenv.load_dotenv()
 
-client = discord.Client(intents=intents)
 
-@client.event
-async def on_ready():
-    print(f'We have logged in as {client.user}')
+from MentalBot import MentalBot
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
+bot = MentalBot()
 
-    if message.content.startswith('$hello'):
-        await message.channel.send('Hello!')
+description = textwrap.dedent((f"""
+        **General**
+        `m.help` - help command 
+        `/help` - also a help command
+        """))
 
-client.run('your token here')
+@bot.command(name="help")
+async def help(ctx):
+    embed = disnake.Embed(title="Help Panel", description=description, color=disnake.Color.blurple())
+    embed.set_thumbnail(url=bot.user.avatar.url)
+    embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar.url)
+    await ctx.send(embed=embed)
+
+@bot.slash_command(name="help", description="A help command!")
+async def slash_help(inter):
+    embed = disnake.Embed(title="Help Panel", description=description, color=disnake.Color.blurple())
+    embed.set_thumbnail(url=bot.user.avatar.url)
+    embed.set_footer(text=f"Requested by {inter.author.name}", icon_url=inter.author.avatar.url)
+    await inter.response.send_message(embed=embed)
+
+
+
+if __name__ == '__main__':
+    bot.run(os.getenv("TOKEN"))
