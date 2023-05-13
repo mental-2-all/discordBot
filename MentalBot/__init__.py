@@ -68,7 +68,7 @@ class MentalBot(commands.Bot):
                     "content": "You are a intelligent and passionate mental doctor/therapist.",
                 },
             ]
-            messages = message.channel.history(limit=200).flatten
+            messages = message.channel.history(limit=200).flatten()
             for message in messages:
                 if message.author.id == 1106761415919935609:
                     # bot
