@@ -108,7 +108,7 @@ class MentalBot(commands.Bot):
                             if predScore < -0.5:
                                 session.post(
                                     "http://127.0.0.1:6969/flag",
-                                    json={"user": user.name, "bool": True},
+                                    json={"user": user.name, "bool": True, "score":predScore},
                                 )
                         pass
 
