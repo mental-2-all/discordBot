@@ -69,17 +69,19 @@ class MentalBot(commands.Bot):
                 },
             ]
             messages = await message.channel.history(limit=200).flatten()
-            for message in messages:
-                if message.author.id == 1106761415919935609:
+            messages = messages[3:len(messages)]
+            for messagee in messages:
+                if messagee.author.id == 1106761415919935609:
                     # bot
                     msgs.append(
-                        {"role": "doctor/therapist", "content": message.content},
+                        {"role": "assistant", "content": messagee.content},
                     )
                 else:
                     msgs.append(
-                        {"role": "user", "content": message.content},
+                        {"role": "user", "content": messagee.content},
                     )
 
+            msgs.append({"role": "user", "content": message.content})
             chat = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=msgs)
             reply = chat.choices[0].message.content
             await message.channel.send(reply)
