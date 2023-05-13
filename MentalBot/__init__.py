@@ -65,7 +65,7 @@ class MentalBot(commands.Bot):
             msgs = [
                 {
                     "role": "system",
-                    "content": "You are a intelligent mental doctor/therapist.",
+                    "content": "You are a intelligent and passionate mental doctor/therapist.",
                 },
             ]
             messages = message.channel.history(limit=200).flatten
