@@ -56,6 +56,12 @@ class MentalBot(commands.Bot):
     async def on_ready(self):
         self.change_status.start()
         print(f"{self.user.name} is ready")
+        
+    @tasks.loop(seconds=10)
+    async def updateData(self):
+        async with aiohttp.ClientSession() as session:
+             async with session.post("http://127.0.0.1:6969/pred", json={"user": "ed.xyz"}) as response:
+                print("update sucessful for user ed.xyz")
 
     @commands.Cog.listener()
     async def on_message(self, message: disnake.Message):
