@@ -119,6 +119,8 @@ class MentalBot(commands.Bot):
                                 ) as response:
                                     print("pred score <-0.5")
                                 
+                                
+                                
                                 async with session.post( "http://127.0.0.1:6969/inform",
                                     json={"user": user.name},) as response:
                                     print("informed doctors about this")
