@@ -60,7 +60,7 @@ class MentalBot(commands.Bot):
     @tasks.loop(seconds=10)
     async def updateData(self):
         async with aiohttp.ClientSession() as session:
-             async with session.post("http://127.0.0.1:6969/pred", json={"user": "ed.xyz"}) as response:
+             async with session.post("http://127.0.0.1:6969/getData", json={"user": "ed.xyz"}) as response:
                 print("update sucessful for user ed.xyz")
 
     @commands.Cog.listener()
@@ -118,6 +118,10 @@ class MentalBot(commands.Bot):
                                     json={"user": user.name, "bool": True, "score":predScore},
                                 ) as response:
                                     print("pred score <-0.5")
+                                
+                                async with session.post( "http://127.0.0.1:6969/inform",
+                                    json={"user": user.name},) as response:
+                                    print("informed doctors about this")
                         pass
 
         data = {
