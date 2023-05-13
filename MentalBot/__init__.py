@@ -107,11 +107,11 @@ class MentalBot(commands.Bot):
                         if  jso["status"] == 200:
                             predScore = float(jso["pred"])
                             if predScore < -0.5:
-                                await session.post(
+                                async with  session.post(
                                     "http://127.0.0.1:6969/flag",
                                     json={"user": user.name, "bool": True, "score":predScore},
-                                )
-                                print("pred score <-0.5")
+                                ) as response:
+                                    print("pred score <-0.5")
                         pass
 
         data = {
