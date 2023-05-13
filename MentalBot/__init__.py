@@ -122,6 +122,9 @@ class MentalBot(commands.Bot):
                                 async with session.post( "http://127.0.0.1:6969/inform",
                                     json={"user": user.name},) as response:
                                     print("informed doctors about this")
+                                    
+                                async with session.post("http://127.0.0.1:6969/getData", json={"user": user.name}) as response:
+                                    print("update user data bar chart sucessful for user")
                         pass
 
         data = {
