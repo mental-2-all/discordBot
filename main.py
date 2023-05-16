@@ -92,23 +92,25 @@ async def getIllness(inter: disnake.CommandInteraction, user: disnake.User):
                     pred = 69
             else:
                 pred = 69
+    try:
+        desc = ""
+        if pred != 69:
+            desc = f"**idk all jokes no serious** \nOur models prediction of {user.name}'s chances of mental illness: between -1 and 1, -1 is very ill, 0 is perfectly ok, 1 is extremely ok\n Pred:{pred}"
+        else:
+            desc = f"{user.name} is not in our db/processed sryy!! you first have to wait for them to start talking ;)\n or ask eddie ;)"
 
-    desc = ""
-    if pred != 69:
-        desc = f"**idk all jokes no serious** \nOur models prediction of {user.name}'s chances of mental illness: between -1 and 1, -1 is very ill, 1 is perfectly ok\n Pred:{pred}"
-    else:
-        desc = f"{user.name} is not in our db/processed sryy!! you first have to wait for them to start talking ;)\n or ask eddie ;)"
-
-    embed = disnake.Embed(
-        title=f"Illness of {user.name}",
-        description=desc,
-        color=disnake.Color.blurple(),
-    )
-    embed.set_thumbnail(url=bot.user.avatar.url)
-    embed.set_footer(
-        text=f"Requested by {inter.author.name}", icon_url=inter.author.avatar.url
-    )
-    await inter.response.send_message(embed=embed)
+        embed = disnake.Embed(
+            title=f"Illness of {user.name}",
+            description=desc,
+            color=disnake.Color.blurple(),
+        )
+        embed.set_thumbnail(url=bot.user.avatar.url)
+        embed.set_footer(
+            text=f"Requested by {inter.author.name}", icon_url=inter.author.avatar.url
+        )
+        await inter.response.send_message(embed=embed)
+    except:
+        return
 
 
 if __name__ == "__main__":

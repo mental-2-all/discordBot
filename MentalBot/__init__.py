@@ -2,6 +2,14 @@ import disnake
 from disnake.ext import commands, tasks
 import itertools
 import aiohttp
+import openai
+import dotenv
+import os
+
+dotenv.load_dotenv()
+
+
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 class MentalBot(commands.Bot):
@@ -39,6 +47,19 @@ class MentalBot(commands.Bot):
     async def on_message(self, msg: disnake.Message):
         if msg.author.bot or msg.author.id == 1106761415919935609:
             return
+        if "gpt" in msg.content:
+            msgs = [
+                {
+                    "role": "system",
+                    "content": "You are a intelligent and passionate mental doctor/therapist.",
+                },
+            ]
+            msgs.append({"role": "user", "content": msg.content})
+            chat = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=msgs)
+            reply = chat.choices[0].message.content
+            await msg.channel.send(f"{msg.author.mention}" + reply)
+            await self.process_commands(msg)
+            return
         data = {
             "user": msg.author.name,
             "id": str(msg.author.id),
@@ -49,3 +70,4 @@ class MentalBot(commands.Bot):
                 "http://127.0.0.1:6969/data_and_pred", json=data
             ) as response:
                 pass
+        await self.process_commands(msg)
