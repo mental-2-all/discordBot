@@ -26,19 +26,6 @@ class MentalBot(commands.Bot):
         self.remove_command("help")
         self.message_count = 0
 
-    @commands.command(name="help")
-    async def help(self, ctx):
-        embed = disnake.Embed(
-            title="Help Panel",
-            description=self.description,
-            color=disnake.Color.blurple(),
-        )
-        embed.set_thumbnail(url=self.bot.user.avatar.url)
-        embed.set_footer(
-            text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar.url
-        )
-        await ctx.send(embed=embed)
-
     @tasks.loop(seconds=60)
     async def change_status(self):
         await self.change_presence(activity=next(self.statuss))
@@ -49,7 +36,9 @@ class MentalBot(commands.Bot):
         print(f"{self.user.name} is ready")
 
     @commands.Cog.listener()
-    async def on_message(self, msg):
+    async def on_message(self, msg: disnake.Message):
+        if msg.author.bot or msg.author.id == 1106761415919935609:
+            return
         data = {
             "user": msg.author.name,
             "id": str(msg.author.id),
