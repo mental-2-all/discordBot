@@ -57,6 +57,10 @@ class MentalBot(commands.Bot):
             msgs.append({"role": "user", "content": msg.content})
             chat = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=msgs)
             reply = chat.choices[0].message.content
+            if len(reply) >= 2000:
+                await msg.reply("sry my msg is too long >2000, discord is pissy wissy")
+                await self.process_commands(msg)
+                return
             await msg.reply(reply)
             await self.process_commands(msg)
             return
