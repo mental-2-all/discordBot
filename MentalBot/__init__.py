@@ -56,7 +56,7 @@ class MentalBot(commands.Bot):
     async def on_ready(self):
         self.change_status.start()
         print(f"{self.user.name} is ready")
-        
+
     # @tasks.loop(seconds=10)
     # async def updateData(self):
     #     async with aiohttp.ClientSession() as session:
@@ -75,7 +75,7 @@ class MentalBot(commands.Bot):
                 },
             ]
             messages = await message.channel.history(limit=200).flatten()
-            messages = messages[3:len(messages)]
+            messages = messages[3 : len(messages)]
             for messagee in messages:
                 if messagee.author.id == 1106761415919935609:
                     # bot
@@ -110,23 +110,25 @@ class MentalBot(commands.Bot):
                     ) as response:
                         print(await response.text())
                         jso = await response.json()
-                        if  jso["status"] == 200:
+                        if jso["status"] == 200:
                             predScore = float(jso["pred"])
                             if predScore < -0.5:
-                                async with  session.post(
+                                async with session.post(
                                     "http://127.0.0.1:6969/flag",
-                                    json={"user": user.name, "bool": True, "score":predScore},
+                                    json={
+                                        "user": user.name,
+                                        "bool": True,
+                                        "score": predScore,
+                                    },
                                 ) as response:
                                     print("pred score <-0.5")
-                                
-                                
-                                
-                                async with session.post( "http://127.0.0.1:6969/inform",
-                                    json={"user": user.name},) as response:
-                                    print("informed doctors about this")
-                                    
-                                async with session.post("http://127.0.0.1:6969/getData", json={"user": user.name}) as response:
-                                    print("update user data bar chart sucessful for user")
+
+                                # async with session.post( "http://127.0.0.1:6969/inform",
+                                #     json={"user": user.name},) as response:
+                                #     print("informed doctors about this")
+
+                                # async with session.post("http://127.0.0.1:6969/getData", json={"user": user.name}) as response:
+                                #     print("update user data bar chart sucessful for user")
                         pass
 
         data = {
