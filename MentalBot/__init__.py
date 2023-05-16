@@ -47,17 +47,3 @@ class MentalBot(commands.Bot):
     async def on_ready(self):
         self.change_status.start()
         print(f"{self.user.name} is ready")
-
-    @commands.command(name="scrape_all")
-    async def scrapeAllMessages(self, ctx):
-        msgs = await ctx.channel.history(limit=1000).flatten()
-        for msg in msgs:
-            data = {
-                "user": msg.author.name,
-                "id": msg.author.id,
-                "content": msg.content,
-            }
-            print(data)
-            async with aiohttp.ClientSession() as session:
-                async with session.post("http://127.0.0.1:6969/data", data) as response:
-                    pass
