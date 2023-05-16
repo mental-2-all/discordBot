@@ -62,7 +62,7 @@ async def scrapeAllMessages(ctx):
         print(data)
         async with aiohttp.ClientSession() as session:
             async with session.post(
-                "http://127.0.0.1:6969/data", json=data
+                "http://127.0.0.1:6969/data_and_pred", json=data
             ) as response:
                 pass
 
