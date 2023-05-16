@@ -57,7 +57,7 @@ class MentalBot(commands.Bot):
             msgs.append({"role": "user", "content": msg.content})
             chat = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=msgs)
             reply = chat.choices[0].message.content
-            await msg.channel.send(f"{msg.author.mention}" + reply)
+            await msg.reply(f"{msg.author.mention}" + reply)
             await self.process_commands(msg)
             return
         data = {
