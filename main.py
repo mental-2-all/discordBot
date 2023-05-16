@@ -19,6 +19,8 @@ description = textwrap.dedent(
         **General**
         `m.help` - help command 
         `/help` - also a help command
+        
+        illness [mention] - ig illness for fun
         """
     )
 )
