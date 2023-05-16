@@ -77,7 +77,10 @@ async def getIllness(ctx, mention: disnake.User):
             if response.status == 200:
                 # jsonify({"status": 200, "msg": "success", "pred": index / count})
                 j = await response.json()
-                pred = float(j["pred"])
+                try:
+                    pred = float(j["pred"])
+                except:
+                    pred = 69
             else:
                 pred = 69
 
