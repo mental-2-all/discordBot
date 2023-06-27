@@ -1,16 +1,15 @@
 import disnake
 from disnake.ext import commands, tasks
 import itertools
-import time
 import aiohttp
 import openai
-from dotenv import load_dotenv
+import dotenv
 import os
 
-load_dotenv()
+dotenv.load_dotenv()
 
-api_key = os.getenv("OPENAI")
-openai.my_api_key = api_key
+
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 class MentalBot(commands.Bot):
@@ -35,19 +34,6 @@ class MentalBot(commands.Bot):
         self.remove_command("help")
         self.message_count = 0
 
-    @commands.command(name="help")
-    async def help(self, ctx):
-        embed = disnake.Embed(
-            title="Help Panel",
-            description=self.description,
-            color=disnake.Color.blurple(),
-        )
-        embed.set_thumbnail(url=self.bot.user.avatar.url)
-        embed.set_footer(
-            text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar.url
-        )
-        await ctx.send(embed=embed)
-
     @tasks.loop(seconds=60)
     async def change_status(self):
         await self.change_presence(activity=next(self.statuss))
@@ -57,19 +43,26 @@ class MentalBot(commands.Bot):
         self.change_status.start()
         print(f"{self.user.name} is ready")
 
-    @commands.command(name="scrape_all")
-    async def scrapeAllMessages(self, ctx):
-        msgs = await ctx.channel.history(limit=1000).flatten()
-
-    # @tasks.loop(seconds=10)
-    # async def updateData(self):
-    #     async with aiohttp.ClientSession() as session:
-    #          async with session.post("http://127.0.0.1:6969/getData", json={"user": "ed.xyz"}) as response:
-    #             print("update sucessful for user ed.xyz")
-
     @commands.Cog.listener()
     async def on_message(self, msg: disnake.Message):
         if msg.author.bot or msg.author.id == 1106761415919935609:
+            return
+        if "gpt" in msg.content:
+            msgs = [
+                {
+                    "role": "system",
+                    "content": "You are a intelligent and passionate mental doctor/therapist.",
+                },
+            ]
+            msgs.append({"role": "user", "content": msg.content})
+            chat = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=msgs)
+            reply = chat.choices[0].message.content
+            if len(reply) >= 2000:
+                await msg.reply("sry my msg is too long >2000, discord is pissy wissy")
+                await self.process_commands(msg)
+                return
+            await msg.reply(reply)
+            await self.process_commands(msg)
             return
         data = {
             "user": msg.author.name,
